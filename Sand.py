@@ -4,7 +4,10 @@ import matplotlib.animation
 
 #0 dirichlet B.C's - no sand at either end of the belt
 dir0 = 0.0  # u(0,t)= dir0
-dir1 = 0.0  # u(1,t)= dir1
+dir1 = 0.0  # u(L,t)= dir1
+
+#Define external constants V (speed of belt), D(Diffusion coefficient), and s (source term)
+V, D, s = 0.25, 5.0, 1.0
 
 #Function for setting initial conditions in space
 def I(x): # initial u(x,0) = 0, dump sand everywhere
@@ -39,9 +42,6 @@ def plotting(U,L):
 
     N_dots = 20
     x_dots = np.linspace(0, L, N_dots+1)    # spacial points to plot exact solution at
-
-    #some arbitarily chosen time points to compare at
-    for plot_pos in [0, int(size_t/10),int(size_t/5), int(size_t/2), int(size_t)]:
     
     #exact solution
         # U_tplot = U_exact(x_dots,t[plot_pos]) 
@@ -49,9 +49,8 @@ def plotting(U,L):
         # ax.plot(x_dots,U_tplot,linestyle = ':',color = colours[colour_pos],marker = markers[0], label=label)
 
     #numerical solution
-        label = "Numerical PDE, t=" + "%0.3f" % (t[plot_pos],)
-        ax.plot(x_pde,U[:,plot_pos],color = colours[colour_pos],ls='--', label=label)
-        colour_pos = colour_pos + 1;
+        #label = "Numerical PDE, t= 1"
+    ax.plot(x_pde,U[:,-1],ls='--')
     
     plt.xlim(0,L) # zoom in on area of interest
     ax.legend() # turn on legend 
@@ -68,8 +67,8 @@ Nt_points = Nt_gaps + 1
 t = np.linspace(0.,T,Nt_points)  # times at each time step
 Nx_spaces = 100; #number of spaces in x direction
 Nx_points = Nx_spaces + 1 
-L = 1; 
-x_pde = np.linspace(0, L, Nx_points)    #mesh points in space
+L = 5; 
+x_pde = np.linspace(0, L, Nx_points) #mesh points in space
 dx = x_pde[1] - x_pde[0] 
 dt = t[1] - t[0]
 C = dt/(dx**2)
@@ -104,7 +103,7 @@ for n in range(1, Nt_points):
     
     #compute u at inner mesh points
     for i in range(1, Nx_points-1):
-        u[i] = u_old[i] + (dt/(dx**2))*(u[i-1]-2*u[i]+u[i+1])
+        u[i] = u_old[i] + s*dt + dt*D*((u_old[i-1] - 2*u_old[i])/(dx**2)) - V*dt*((u_old[i+1]-u_old[i-1])/(2*dx))
  
     #update u_old before next step
     u_old[:]= u
