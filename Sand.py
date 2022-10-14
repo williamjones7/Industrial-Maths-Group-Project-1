@@ -6,11 +6,8 @@ import matplotlib.animation
 dir0 = 0.0  # u(0,t)= dir0
 dir1 = 0.0  # u(L,t)= dir1
 
-#Define external constants V (speed of belt), D(Diffusion coefficient), and s (source term)
-V, D, s = 0.25, 5.0, 1.0
-
 #Function for setting initial conditions in space
-def I(x): # initial u(x,0) = 0, dump sand everywhere
+def I(x): # initial u(x,0) = 0, dump sand at all x, assume we start with no sand
     len_x = np.size(x)
     i_x = np.zeros(len_x)
     return i_x
@@ -50,7 +47,7 @@ def plotting(U,L):
 
     #numerical solution
         #label = "Numerical PDE, t= 1"
-    ax.plot(x_pde,U[:,-1],ls='--')
+    ax.plot(x_pde,U[:,-1])
     
     plt.xlim(0,L) # zoom in on area of interest
     ax.legend() # turn on legend 
@@ -76,39 +73,43 @@ print("Delta x =", dx, "Delta t = ", dt, "C =", C)
 
 ##----------intialise lists ------------------------
 
-#Define the numerical solution 
-#The first index is space and the second time
-U = np.zeros((Nx_points,Nt_points))
+#Define the numerical solution for different belt speeds, and coefficients
+#Define external constants V (speed of belt), D(Diffusion coefficient), and s (source term)
+def numerical(s, V, D):
+    #The first index is space and the second time
+    U = np.zeros((Nx_points,Nt_points))
 
-#The initial condition
-U[:,0]=I(x_pde)
+    #The initial condition
+    U[:,0]=I(x_pde)
 
-#Boundary conditions
-U[0,0]  = dir0 
-U[-1,0] = dir1
+    #Boundary conditions
+    U[0,0]  = dir0 
+    U[-1,0] = dir1
 
-u_old = I(x_pde)
+    u_old = I(x_pde)
 
-u = np.zeros(Nx_points)
-# and to store the full solution
-U = np.zeros((Nx_points,Nt_points))
-U[:,0] = u_old
+    u = np.zeros(Nx_points)
+    # and to store the full solution
+    U = np.zeros((Nx_points,Nt_points))
+    U[:,0] = u_old
 
-#compute numerical solution 
-for n in range(1, Nt_points):
+    #compute numerical solution 
+    for n in range(1, Nt_points):
+        
+        #set Dirichlet boundary points here
+        u[0] = dir0
+        u[-1] = dir1
+        
+        #compute u at inner mesh points
+        for i in range(1, Nx_points-1):
+            u[i] = u_old[i] + s*dt + dt*D*((u_old[i-1] - 2*u_old[i])/(dx**2)) - V*dt*((u_old[i+1]-u_old[i-1])/(2*dx))
     
-    #set Dirichlet boundary points here
-    u[0] = dir0
-    u[-1] = dir1
-    
-    #compute u at inner mesh points
-    for i in range(1, Nx_points-1):
-        u[i] = u_old[i] + s*dt + dt*D*((u_old[i-1] - 2*u_old[i])/(dx**2)) - V*dt*((u_old[i+1]-u_old[i-1])/(2*dx))
- 
-    #update u_old before next step
-    u_old[:]= u
+        #update u_old before next step
+        u_old[:]= u
 
-    #copy into full storage
-    U[:,n] = u;
+        #copy into full storage
+        U[:,n] = u
+
+    return U
     
-plotting(U, L)
+plotting(numerical(1.0, 0.25, 1.0), L)
