@@ -31,19 +31,28 @@ def I(x): # initial u(x,0) = 0, dump sand at all x, assume we start with no sand
     i_x = np.zeros(len_x)
     return i_x
 
-#Function for exact solution, when we find it
-# def U_exact(x,t):
+# #Function for exact solution
+# def U_exact(x,s):
 #     M = np.size(x)
 #     u_ex = np.zeros(M)  
 #     u_ex[0] = dir0   # a1 is dirichlet boundary condition at u(0,t)
 #     for i in range(1,M-1):
 #         sum_u_ex = 0
 #         for n in range(1,2000):
-#             sum_u_ex += (((2*(-1)**n)/(np.pi*n))+(n%2)*(8/(np.pi*n)))*np.sin(n*np.pi*x[i])*np.exp((-1)*(n**2)*(np.pi**2)*t)
+#             sum_u_ex += (s*L/(1-np.exp(L*D/V))) * (np.exp((D/V)*x)) + s*x + ((-s*L)/(1 - np.exp(L*D/V)))
 #         u_ex[i] = sum_u_ex
 #     u_ex = u_ex + x  # add x for term in exact solution
 #     u_ex[M-1] = dir1 # dirichlet boundary condition at u(L,t)
 #     return u_ex
+
+def exact(x, s, V, D):
+    M = np.size(x)
+    u_ex = np.zeros(M) 
+    for i in range(1,M-1):
+        beta = (s*L)/(V*(1-np.exp((V*L)/D)))
+        u_ex[i] = beta*(np.exp((V/D)*x[i])-1) + (s/V)*x[i]
+        #u_ex[i] = np.exp(x[i])
+    return u_ex
 
 #Define the numerical solution for different belt speeds, and coefficients
 #Define external constants V (speed of belt), D(Diffusion coefficient), and s (source term)
@@ -59,11 +68,11 @@ def numerical(s, V, D):
     U[-1,0] = dir1
 
     #Find coefficients for numerical solution 
-    A = V*dt/dx
-    B = D*dt/(dx**2)
+    p = V*dt/dx
+    r = D*dt/(dx**2)
 
-    #For stability we require A <= 1 and B <= 1/2
-    print("Delta x =", dx, "Delta t = ", dt, "A =", A, "B =", B)
+    #For stability we require p <= 1 and r <= 1/2
+    print("Delta x =", dx, "Delta t = ", dt, "p =", p, "r =", r)
 
     u_old = I(x_pde)
 
@@ -81,7 +90,7 @@ def numerical(s, V, D):
         
         #compute u at inner mesh points
         for i in range(1, Nx_points-1):
-            u[i] = (A/2 + B)*u_old[i-1] + (1 - 2*B)*u_old[i] + (B - A/2)*u_old[i+1] + s*dt
+            u[i] = (p/2 + r)*u_old[i-1] + (1 - 2*r)*u_old[i] + (r - p/2)*u_old[i+1] + s*dt
     
         #update u_old before next step
         u_old[:]= u
@@ -94,32 +103,23 @@ def numerical(s, V, D):
 
 # ===== Plotting =====
 
-s, V, D = 1.0, 0.25, 5.0
-
-V_list = np.arange(0.25, 1, 0.1)
-D_list = np.arange(0.2, 1.2, 0.2)
-V_list = [0.25, 0.5, 0.75, 1.0, 1.25, 5.0]
-
 fig, ax = plt.subplots(1, 1, figsize=(10, 8))
 markers =['X','.','+','o']
 
 colours = ['r','g','b','purple','yellow','orange', 'black'] # make comparison easy
 colour_pos = 0;
 
-#N_dots = 20
-#x_dots = np.linspace(0, L, N_dots+1)    # spacial points to plot exact solution at
+N_dots = 100
+x_dots = np.linspace(0, L, N_dots+1)    # spacial points to plot exact solution at
 
 #exact solution
-    # U_tplot = U_exact(x_dots,t[plot_pos]) 
-    # label = "Exact, t=" + "%0.3f" % (t[plot_pos],)
-    # ax.plot(x_dots,U_tplot,linestyle = ':',color = colours[colour_pos],marker = markers[0], label=label)
+U_tplot = exact(x_dots, 1.0, 0.5, 0.4) 
+ax.plot(x_dots, U_tplot,linestyle = ':',color = colours[colour_pos],marker = markers[0])
+ax.plot(x_pde, numerical(1.0, 0.5, 0.4)[:,-1], color = colours[1])
 
-#numerical solution
-    #label = "Numerical PDE, t= 1"
-
-for i in range(0, len(V_list)):
-    U = numerical(s, V_list[i], D)
-    ax.plot(x_pde,U[:,-1], color = colours[i])
+# for i in range(0, len(V_list)):
+#     U = numerical(s, V_list[i], D)
+#     ax.plot(x_pde,U[:,-1], color = colours[i])
 
 plt.xlim(0,L) # zoom in on area of interest
 ax.legend() # turn on legend 
