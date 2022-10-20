@@ -5,7 +5,7 @@ import matplotlib.animation
 ## ====== setting parameters =======
 
 Nt_gaps = 30000    # number of timesteps
-T = 1           # final time 
+T = 30           # final time - we're interested in time as it gets large  
 #h = t_max/(Nt_points)  # time step
 
 Nt_points = Nt_gaps + 1
@@ -32,26 +32,12 @@ def I(x): # initial u(x,0) = 0, dump sand at all x, assume we start with no sand
     return i_x
 
 # #Function for exact solution
-# def U_exact(x,s):
-#     M = np.size(x)
-#     u_ex = np.zeros(M)  
-#     u_ex[0] = dir0   # a1 is dirichlet boundary condition at u(0,t)
-#     for i in range(1,M-1):
-#         sum_u_ex = 0
-#         for n in range(1,2000):
-#             sum_u_ex += (s*L/(1-np.exp(L*D/V))) * (np.exp((D/V)*x)) + s*x + ((-s*L)/(1 - np.exp(L*D/V)))
-#         u_ex[i] = sum_u_ex
-#     u_ex = u_ex + x  # add x for term in exact solution
-#     u_ex[M-1] = dir1 # dirichlet boundary condition at u(L,t)
-#     return u_ex
-
 def exact(x, s, V, D):
     M = np.size(x)
     u_ex = np.zeros(M) 
     for i in range(1,M-1):
         beta = (s*L)/(V*(1-np.exp((V*L)/D)))
         u_ex[i] = beta*(np.exp((V/D)*x[i])-1) + (s/V)*x[i]
-        #u_ex[i] = np.exp(x[i])
     return u_ex
 
 #Define the numerical solution for different belt speeds, and coefficients
@@ -93,28 +79,28 @@ def numerical(s, V, D):
             u[i] = (p/2 + r)*u_old[i-1] + (1 - 2*r)*u_old[i] + (r - p/2)*u_old[i+1] + s*dt
     
         #update u_old before next step
-        u_old[:]= u
+        u_old[:]= u.copy()
 
         #copy into full storage
-        U[:,n] = u
+        U[:,n] = u.copy()
 
     return U
 
 
 # ===== Plotting =====
 
+#Set up the plot 
 fig, ax = plt.subplots(1, 1, figsize=(10, 8))
 markers =['X','.','+','o']
-
 colours = ['r','g','b','purple','yellow','orange', 'black'] # make comparison easy
 colour_pos = 0;
 
+#Set up spacial points
 N_dots = 100
 x_dots = np.linspace(0, L, N_dots+1)    # spacial points to plot exact solution at
 
 #exact solution
-U_tplot = exact(x_dots, 1.0, 0.5, 0.4) 
-ax.plot(x_dots, U_tplot,linestyle = ':',color = colours[colour_pos],marker = markers[0])
+ax.plot(x_dots, exact(x_dots, 1.0, 0.5, 0.4) ,linestyle = ':',color = colours[colour_pos],marker = markers[0])
 ax.plot(x_pde, numerical(1.0, 0.5, 0.4)[:,-1], color = colours[1])
 
 # for i in range(0, len(V_list)):
