@@ -96,112 +96,93 @@ def numerical(s, V, D, L):
 
 # ===== Plotting =====
 
-# markers =['x', '+', 'o']
-# linestyle = ['dotted', 'dashed', 'dashdot', 'solid']
-# colours = ['r','g','b','purple','yellow','orange'] # make comparison easy
+markers =['x', '+', '1', 'o']
+linestyle = ['solid', 'dotted', 'dashed', 'dashdot', 'solid']
+colours = ['maroon', 'red', 'lightcoral', 'green', 'mediumseagreen', 'palegreen', 'navy', 'blue', 'cornflowerblue'] # make comparison easy
+reds = ['darkred', 'crimson', 'indianred', 'red', 'lightsalmon', 'salmon']
+greens =['darkgreen', 'green', 'seagreen', 'mediumseagreen','springgreen', 'palegreen']
+blues = ['navy', 'royalblue','mediumslateblue', 'dodgerblue', 'skyblue', 'lightsteelblue']
 
-# x_pde, dx, dt = scale(length)
-# x_dots = np.linspace(0, length, N_dots+1)
+x_pde, dx, dt = scale(length)
+x_dots = np.linspace(0, length, N_dots+1)
 
-# plt.figure(1, figsize=(10,8), dpi =200)
-# advection = [0.3, 0.4, 0.5]
-# diffusion = [0.2, 0.6, 1.0]
-# lengths = [5,6,7]
-
-# for i in range(0, len(advection)):
-#     label = "Exact, V=" + "%0.3f" % (advection[i])
-#     plt.plot(x_dots, exact(1.0, advection[i], 0.5, length),color = colours[0], marker = markers[i], label = label)
-#     label = "Numerical PDE, V=" + "%0.3f" % (advection[i])
-#     plt.plot(x_pde, numerical(1.0, advection[i], 0.5, length)[:,-1], color = colours[0], linestyle = linestyle[i], label = label)
-
-#     label = "Exact, D=" + "%0.3f" % (diffusion[i])
-#     plt.plot(x_dots, exact(1.0, 0.25, diffusion[i], 5),color = colours[1], marker = markers[i], label = label)
-#     label = "Numerical PDE, D=" + "%0.3f" % (diffusion[i])
-#     plt.plot(x_pde, numerical(1.0, 0.25, diffusion[i], 5)[:,-1], color = colours[1], linestyle = linestyle[i], label = label)
-
-#     x_pde_2, dx_2, dt_2 = scale(lengths[i])
-#     x_dots_2 = np.linspace(0, lengths[i], N_dots+1)  
-#     label = "Exact, L=" + "%0.3f" % (lengths[i])
-#     plt.plot(x_dots_2, exact(1.0, 0.25, 0.5, lengths[i]),color = colours[2], marker = markers[i], label = label)
-#     label = "Numerical PDE, L=" + "%0.3f" % (lengths[i])
-#     plt.plot(x_pde_2, numerical(1.0, 0.25, 0.5, lengths[i])[:,-1], color = colours[2], linestyle = 'dashed', label = label)
-
-# plt.legend()
-# plt.xlim(0,max(lengths)) # zoom in on area of interest
-# plt.xlabel('Position on conveyor belt (metres)', fontsize = 15)
-# plt.ylabel('Height of sand (metres)', fontsize = 15)
-# plt.savefig('Figure 1.png')
-
-
-plt.figure(2, figsize=(10,8), dpi =200)
+plt.figure(4, figsize=(10,8), dpi =80)
 Nintervals = 50
 
 max_height_adv = []
 interval_size = (0.5-0.25)/Nintervals
 for v in np.arange(0.25, 0.25 + interval_size*(Nintervals+1), interval_size):
     max_height_adv.append(max(exact(1.0, v, 0.5, length)))
-plt.plot(max_height_adv, label = 'Advection')
+plt.plot(max_height_adv, label = 'Advection, V', color = 'red')
 
+interval_size = (1.0-0.5)/Nintervals
 max_height_diff = []
-for d in np.arange(0.04, 0.04 + interval_size*(Nintervals+1), interval_size):
+for d in np.arange(0.5, 0.5 + interval_size*(Nintervals+1), interval_size):
     max_height_diff.append(max(exact(1.0, 0.25, d, length)))
-plt.plot(max_height_diff, label = 'Diffusion')
+plt.plot(max_height_diff, label = 'Diffusion, D', color = 'green')
 
+interval_size = (10-5)/Nintervals
 max_height_length = []
 for l in np.arange(5, 5  + interval_size*(Nintervals+1), interval_size):
     max_height_length.append(max(exact(1.0, 0.25, 0.5, l)))
-plt.plot(max_height_length, label = 'Length')
+plt.plot(max_height_length, label = 'Length, L', color = 'blue')
+
+plt.plot(max(exact(1.0, 0.25, 0.5, length))*np.ones(Nintervals), linestyle = 'dashed', color='Black', label = 'D = 0.5, V = 0.25, L = 5')
+plt.legend()
+plt.yticks([])
+plt.xticks([])
+plt.xlabel('Change in coefficient', fontsize = 16)
+plt.ylabel('Max height of sand pile', fontsize = 16)
+plt.savefig('Figure Height.png')
+
+
+plt.figure(1, figsize=(10, 8), dpi=200)
+#define advection speeds
+advection = [0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+for i in range(0, len(advection)):
+    label = "Exact, V=" + "%0.3f" % (advection[i])
+    plt.plot(x_dots, exact(1.0, advection[i], 0.5, 5),color = reds[i], linestyle = ':', marker = markers[0], label = label)
+    label = "Numerical PDE, V=" + "%0.3f" % (advection[i])
+    plt.plot(x_pde, numerical(1.0, advection[i], 0.5, 5)[:,-1], color = reds[i], linestyle = 'dashed', label = label)
 
 plt.legend()
-plt.xlabel('Change in variable', fontsize = 15)
-plt.ylabel('Max height', fontsize = 15)
-plt.savefig('Figure 2.png')
+plt.yticks([])
+plt.xlim(0,length) # zoom in on area of interest
+plt.xlabel('Spacial Position, x', fontsize = 15)
+plt.ylabel('Height, h', fontsize = 15)
+plt.savefig('Advection Figure 1.png')
 
+plt.figure(2, figsize=(10, 8), dpi=200)
+#define diffusion coefficients 
+diffusion = [0.2, 0.4, 0.6, 0.8, 1.0]
+for i in range(0, len(diffusion)):
+    label = "Exact, D=" + "%0.3f" % (diffusion[i])
+    plt.plot(x_dots, exact(1.0, 0.25, diffusion[i], 5),color = greens[i], linestyle = ':', marker = markers[1], label = label)
+    label = "Numerical PDE, D=" + "%0.3f" % (diffusion[i])
+    plt.plot(x_pde, numerical(1.0, 0.25, diffusion[i], 5)[:,-1], color = greens[i], linestyle = 'dashed', label = label)
 
-# plt.figure(1, figsize=(10, 8), dpi=200)
-# #define advection speeds
-# advection = [0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
-# for i in range(0, len(advection)):
-#     label = "Exact, V=" + "%0.3f" % (advection[i])
-#     plt.plot(x_dots, exact(x_dots, 1.0, advection[i], 0.5, 5),color = colours[i], linestyle = ':', marker = markers[0], label = label)
-#     label = "Numerical PDE, V=" + "%0.3f" % (advection[i])
-#     plt.plot(x_pde, numerical(1.0, advection[i], 0.5, 5)[:,-1], color = colours[i], linestyle = 'dashed', label = label)
+plt.legend()
+plt.yticks([])
+plt.xlim(0,length) # zoom in on area of interest
+plt.xlabel('Spacial Position, x', fontsize = 15)
+plt.ylabel('Height, h', fontsize = 15)
+plt.savefig('Diffusion Figure 1.png')
 
-# plt.legend()
-# plt.xlim(0,length) # zoom in on area of interest
-# plt.xlabel('Position on conveyor belt (metres)', fontsize = 15)
-# plt.ylabel('Height of sand (metres)', fontsize = 15)
-# plt.savefig('Advection Figure 1.png')
+plt.figure(3, figsize=(10, 8), dpi=200)
+#define lengths
+lengths = [5,6,7,8,9,10]
+for i in range(0, len(lengths)):
+    x_pde, dx, dt = scale(lengths[i])
+    x_dots = np.linspace(0, lengths[i], N_dots+1)  
+    label = "Exact, L=" + "%0.3f" % (lengths[i])
+    plt.plot(x_dots, exact(1.0, 0.25, 0.5, lengths[i]),color = blues[i], linestyle = ':', marker = markers[1], label = label)
+    label = "Numerical PDE, L=" + "%0.3f" % (lengths[i])
+    plt.plot(x_pde, numerical(1.0, 0.25, 0.5, lengths[i])[:,-1], color = blues[i], linestyle = 'dashed', label = label)
 
-# plt.figure(2, figsize=(10, 8), dpi=200)
-# #define diffusion coefficients 
-# diffusion = [0.2, 0.4, 0.6, 0.8, 1.0]
-# for i in range(0, len(diffusion)):
-#     label = "Exact, D=" + "%0.3f" % (diffusion[i])
-#     plt.plot(x_dots, exact(x_dots, 1.0, 0.25, diffusion[i], 5),color = colours[i], linestyle = ':', marker = markers[1], label = label)
-#     label = "Numerical PDE, D=" + "%0.3f" % (diffusion[i])
-#     plt.plot(x_pde, numerical(1.0, 0.25, diffusion[i], 5)[:,-1], color = colours[i], linestyle = 'dashed', label = label)
-
-# plt.legend()
-# plt.xlim(0,5) # zoom in on area of interest
-# plt.xlabel('Position on conveyor belt (metres)', fontsize = 15)
-# plt.ylabel('Height of sand (metres)', fontsize = 15)
-# plt.savefig('Diffusion Figure 1.png')
-
-# plt.figure(3, figsize=(10, 8), dpi=200)
-# #define lengths
-# lengths = [5,6,7,8,9,10]
-# for i in range(0, len(lengths)):
-#     x_pde, dx, dt = scale(lengths[i])
-#     x_dots = np.linspace(0, lengths[i], N_dots+1)  
-#     label = "Exact, L=" + "%0.3f" % (lengths[i])
-#     plt.plot(x_dots, exact(x_dots, 1.0, 0.25, 0.5, lengths[i]),color = colours[i], linestyle = ':', marker = markers[1], label = label)
-#     label = "Numerical PDE, L=" + "%0.3f" % (lengths[i])
-#     plt.plot(x_pde, numerical(1.0, 0.25, 0.5, lengths[i])[:,-1], color = colours[i], linestyle = 'dashed', label = label)
-
-# plt.legend()
-# plt.xlim(0,10) # zoom in on area of interest
-# plt.xlabel('Position on conveyor belt (metres)', fontsize = 15)
-# plt.ylabel('Height of sand (metres)', fontsize = 15)
-# plt.savefig('Length Figure 1.png')
+plt.legend()
+plt.yticks([])
+plt.xlim(0,max(lengths)) # zoom in on area of interest
+plt.xlabel('Spacial Position, x', fontsize = 15)
+plt.ylabel('Height, h', fontsize = 15)
+plt.savefig('Length Figure 1.png')
 
