@@ -29,7 +29,7 @@ def scale(L):
     dt = t[1] - t[0]
     return x_pde, dx, dt
 
-#Function for setting initial conditions in space
+#Function for setting initial conditions in spacePP
 def I(x): # initial u(x,0) = 0, dump sand at all x, assume we start with no sand
     len_x = np.size(x)
     i_x = np.zeros(len_x)
@@ -149,7 +149,7 @@ plt.legend()
 plt.yticks([])
 plt.xlim(0,length) # zoom in on area of interest
 plt.xlabel('Spacial Position, x', fontsize = 15)
-plt.ylabel('Height, h', fontsize = 15)
+plt.ylabel('Height, H', fontsize = 15)
 plt.savefig('Advection Figure 1.png')
 
 plt.figure(2, figsize=(10, 8), dpi=200)
@@ -165,7 +165,7 @@ plt.legend()
 plt.yticks([])
 plt.xlim(0,length) # zoom in on area of interest
 plt.xlabel('Spacial Position, x', fontsize = 15)
-plt.ylabel('Height, h', fontsize = 15)
+plt.ylabel('Height, H', fontsize = 15)
 plt.savefig('Diffusion Figure 1.png')
 
 plt.figure(3, figsize=(10, 8), dpi=200)
@@ -183,6 +183,6 @@ plt.legend()
 plt.yticks([])
 plt.xlim(0,max(lengths)) # zoom in on area of interest
 plt.xlabel('Spacial Position, x', fontsize = 15)
-plt.ylabel('Height, h', fontsize = 15)
+plt.ylabel('Height, H', fontsize = 15)
 plt.savefig('Length Figure 1.png')
 
