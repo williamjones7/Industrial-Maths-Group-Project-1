@@ -89,7 +89,8 @@ def numerical(S, V, D, L):
         #compute u at inner mesh points
         for i in range(1, Nx_points-1):
             xpos = L*i/Nx_points
-            u[i] = (p/2 + r)*u_old[i-1] + (1 - 2*r)*u_old[i] + (r - p/2)*u_old[i+1] + S(xpos, n)*dt
+            time = T*n/Nt_points
+            u[i] = (p/2 + r)*u_old[i-1] + (1 - 2*r)*u_old[i] + (r - p/2)*u_old[i+1] + S(xpos, time)*dt
     
         #update u_old before next step
         u_old[:]= u.copy()
@@ -214,40 +215,27 @@ blues = ['navy', 'royalblue','mediumslateblue', 'dodgerblue', 'skyblue', 'lights
 # plt.ylabel('Max height of sand pile', fontsize = 16)
 # plt.savefig('Figure Height.png')
 
-# ===== S(x, t) non-constant, fix length as 5, D = 0.5, V = 0.5=====
+# ===== S(x, t) non-constant, fix length as 5, D = 0.2, V = 0.5=====
 
-def S_middle_metre(x, t):
-    if 2 < x < 3:
-        return 5.0
+plt.figure(6, figsize=(10, 8), dpi=200)
+
+xLo, xHi = 0,5
+def S_linear_space(x, t):
+    if xLo < x < xHi:
+        return 5.0/(xHi-xLo)
     else:
         return 0.0
 
-def S_control(x, t):
-    if x < length:
-        return 1.0
-    else:
-        return 0.0
-
-plt.figure(6, figsize=(10, 8), dpi=200)
-#Find sand steady state for dumping at first metre
-label = "Dump sand at middle metre"
-x_pde, u_num = numerical(S_middle_metre, 0.5, 0.2, 5)
-plt.plot(x_pde, u_num[:,-1], color = colours[0], linestyle = 'dashed', label = label)
-
-#Find sand steady state for dumping at first metre
-label = "Dump sand everywhere control"
-x_pde, u_num = numerical(S_constant, 0.5, 0.2, 5)
-plt.plot(x_pde, u_num[:,-1], color = colours[1], linestyle = 'dashed', label = label)
-
-plt.figure(6, figsize=(10, 8), dpi=200)
-#Find sand steady state for dumping at first metre
-label = "Control"
-x_pde, u_num = numerical(S_control, 0.5, 0.2, 5)
-plt.plot(x_pde, u_num[:,-1], color = colours[2], linestyle = '', marker = markers[0], label = label)
+xvals = [[0,5], [0, 4], [0,3], [0,2], [0, 1]]
+for i in range(0, len(xvals)):
+    label = "Dump sand at in (" + "%0.3f" % (int(xvals[i][0])) + ", " + "%0.3f" % (int(xvals[i][1])) + ")"
+    xLo, xHi = xvals[i][0], xvals[i][1]
+    x_pde, u_num = numerical(S_linear_space, 0.5, 0.2, 5)
+    plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
 
 plt.legend()
 plt.yticks([])
 plt.xlim(0,length) # zoom in on area of interest
 plt.xlabel('Spacial Position, x', fontsize = 15)
 plt.ylabel('Height, H', fontsize = 15)
-plt.savefig('Sand at start.png')
+plt.savefig('Sand with intervals of x.png')
