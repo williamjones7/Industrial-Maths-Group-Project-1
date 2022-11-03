@@ -5,7 +5,7 @@ import matplotlib.animation
 ## ====== setting parameters =======
 
 Nt_gaps = 30000    # number of timesteps
-T = 30          # final time - we're interested in time as it gets large  
+T = 30       # final time - we're interested in time as it gets large  
 Nt_points = Nt_gaps + 1
 
 t = np.linspace(0.,T,Nt_points)  # times at each time step
@@ -105,8 +105,8 @@ def numerical(S, V, D, L):
 
 markers =['x', '+', '1', 'o']
 linestyle = ['solid', 'dotted', 'dashed', 'dashdot', 'solid']
-colours = ['red', 'green', 'blue', 'orange', 'yellow', 'purple'] # make comparison easy
-reds = ['darkred', 'crimson', 'indianred', 'red', 'lightsalmon', 'salmon']
+colours = ['red', 'green', 'blue', 'orange', 'purple', 'navy'] # make comparison easy
+reds = ['darkred', 'crimson', 'red', 'indianred', 'lightsalmon', 'salmon']
 greens =['darkgreen', 'green', 'seagreen', 'mediumseagreen','springgreen', 'palegreen']
 blues = ['navy', 'royalblue','mediumslateblue', 'dodgerblue', 'skyblue', 'lightsteelblue']
 
@@ -116,58 +116,61 @@ blues = ['navy', 'royalblue','mediumslateblue', 'dodgerblue', 'skyblue', 'lights
 # #define advection speeds
 # advection = [0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 # for i in range(0, len(advection)):
-#     label = "Exact, V=" + "%0.3f" % (advection[i])
+#     label = "Exact, V=" + "%0.6f" % (advection[i])
 #     x_dots, u_exact = exact(1.0, advection[i], 0.5, 5)
-#     plt.plot(x_dots, u_exact,color = reds[i], linestyle = ':', marker = markers[0], label = label)
+#     plt.plot(x_dots, u_exact,color = reds[i], linestyle = '', marker = markers[0], label = label)
 
-#     label = "Numerical PDE, V=" + "%0.3f" % (advection[i])
+#     label = "Numerical PDE, V=" + "%0.6f" % (advection[i])
 #     x_pde, u_num = numerical(S_constant, advection[i], 0.5, 5)
 #     plt.plot(x_pde, u_num[:,-1], color = reds[i], linestyle = 'dashed', label = label)
 
-# plt.legend()
+# plt.legend(fontsize=12)
 # plt.yticks([])
+# plt.title('Change in Advection, D = 0.5, L = 5', fontsize = 20)
 # plt.xlim(0,length) # zoom in on area of interest
-# plt.xlabel('Spacial Position, x', fontsize = 15)
-# plt.ylabel('Height, H', fontsize = 15)
-# plt.savefig('Advection Figure 1.png')
+# plt.xlabel('Spacial Position, x', fontsize = 20)
+# plt.ylabel('Height, H', fontsize = 20)
+# plt.savefig('Advection Figure 1.png', bbox_inches="tight")
 
 # plt.figure(2, figsize=(10, 8), dpi=200)
 # #define diffusion coefficients 
 # diffusion = [0.2, 0.4, 0.6, 0.8, 1.0]
 # for i in range(0, len(diffusion)):
-#     label = "Exact, D=" + "%0.3f" % (diffusion[i])
+#     label = "Exact, D=" + "%0.6f" % (diffusion[i])
 #     x_dots, u_exact = exact(1.0, 0.25, diffusion[i], 5)
-#     plt.plot(x_dots, u_exact,color = greens[i], linestyle = ':', marker = markers[0], label = label)
+#     plt.plot(x_dots, u_exact,color = greens[i], linestyle = '', marker = markers[0], label = label)
 
-#     label = "Numerical PDE, D=" + "%0.3f" % (diffusion[i])
+#     label = "Numerical PDE, D=" + "%0.6f" % (diffusion[i])
 #     x_pde, u_num = numerical(S_constant, 0.25, diffusion[i], 5)
 #     plt.plot(x_pde, u_num[:,-1], color = greens[i], linestyle = 'dashed', label = label)
 
-# plt.legend()
+# plt.legend(fontsize=12)
 # plt.yticks([])
+# plt.title('Change in Diffusion, V = 0.25, L = 5', fontsize=20)
 # plt.xlim(0,length) # zoom in on area of interest
-# plt.xlabel('Spacial Position, x', fontsize = 15)
-# plt.ylabel('Height, H', fontsize = 15)
-# plt.savefig('Diffusion Figure 1.png')
+# plt.xlabel('Spacial Position, x', fontsize = 20)
+# plt.ylabel('Height, H', fontsize = 20)
+# plt.savefig('Diffusion Figure 1.png', bbox_inches="tight")
 
 # plt.figure(3, figsize=(10, 8), dpi=200)
 # #define lengths
 # lengths = [5,6,7,8,9,10]
 # for i in range(0, len(lengths)):
-#     label = "Exact, L=" + "%0.3f" % (lengths[i])
+#     label = "Exact, L=" + "%0.6f" % (lengths[i])
 #     x_dots, u_exact = exact(1.0, 0.25, 0.5, lengths[i])
-#     plt.plot(x_dots, u_exact,color = blues[i], linestyle = ':', marker = markers[0], label = label)
+#     plt.plot(x_dots, u_exact,color = blues[i], linestyle = '', marker = markers[0], label = label)
 
-#     label = "Numerical PDE, L=" + "%0.3f" % (lengths[i])
+#     label = "Numerical PDE, L=" + "%0.6f" % (lengths[i])
 #     x_pde, u_num = numerical(S_constant, 0.25, 0.5, lengths[i])
 #     plt.plot(x_pde, u_num[:,-1], color = blues[i], linestyle = 'dashed', label = label)
 
-# plt.legend()
+# plt.legend(fontsize=12)
 # plt.yticks([])
+# plt.title('Change in Length, V = 0.25, D = 0.5', fontsize=20)
 # plt.xlim(0,max(lengths)) # zoom in on area of interest
-# plt.xlabel('Spacial Position, x', fontsize = 15)
-# plt.ylabel('Height, H', fontsize = 15)
-# plt.savefig('Length Figure 1.png')
+# plt.xlabel('Spacial Position, x', fontsize = 20)
+# plt.ylabel('Height, H', fontsize = 20)
+# plt.savefig('Length Figure 1.png', bbox_inches="tight")
 
 # plt.figure(3_2, figsize=(10, 8), dpi=200)
 # #define lengths
@@ -208,34 +211,139 @@ blues = ['navy', 'royalblue','mediumslateblue', 'dodgerblue', 'skyblue', 'lights
 # plt.plot(max_height_length, label = 'Length, L', color = 'blue')
 
 # plt.plot(max(exact(1.0, 0.25, 0.5, length)[-1])*np.ones(Nintervals), linestyle = 'dashed', color='Black', label = 'D = 0.5, V = 0.25, L = 5')
-# plt.legend()
+# plt.legend(fontsize=12)
+# plt.title('Change in max height, 0.25<V<0.5, 0.5<D<1, 5<L<10', fontsize=20)
 # plt.yticks([])
 # plt.xticks([])
-# plt.xlabel('Change in coefficient', fontsize = 16)
-# plt.ylabel('Max height of sand pile', fontsize = 16)
-# plt.savefig('Figure Height.png')
+# plt.xlabel('Change in coefficient', fontsize = 20)
+# plt.ylabel('Max height of sand pile', fontsize = 20)
+# plt.savefig('Figure Height.png', bbox_inches="tight")
 
-# ===== S(x, t) non-constant, fix length as 5, D = 0.2, V = 0.5=====
+# ===== S(x, t) non-constant - Space dependent =====
 
-plt.figure(6, figsize=(10, 8), dpi=200)
+# plt.figure(6, figsize=(10, 8), dpi=200)
 
-xLo, xHi = 0,5
+xLo, xHi = 0, 5
 def S_linear_space(x, t):
     if xLo < x < xHi:
         return 5.0/(xHi-xLo)
     else:
         return 0.0
 
-xvals = [[0,5], [0, 4], [0,3], [0,2], [0, 1]]
-for i in range(0, len(xvals)):
-    label = "Dump sand at in (" + "%0.3f" % (int(xvals[i][0])) + ", " + "%0.3f" % (int(xvals[i][1])) + ")"
-    xLo, xHi = xvals[i][0], xvals[i][1]
-    x_pde, u_num = numerical(S_linear_space, 0.5, 0.2, 5)
-    plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
+# xvals = [[0,5],[0,4],[0,3],[0,2],[0,1]]
+# for i in range(0, len(xvals)):
+#     xLo, xHi = xvals[i][0], xvals[i][1]
+#     label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
+#     x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
+#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
 
-plt.legend()
+# plt.legend(fontsize=18)
+# plt.yticks([])
+# plt.xlim(0,length) # zoom in on area of interest
+# plt.title('Dropping sand at increasing intervals of x', fontsize = 20)
+# plt.xlabel('Spacial Position, x', fontsize = 20)
+# plt.ylabel('Height, H', fontsize = 20)
+# plt.savefig('Sand with intervals of x.png', bbox_inches="tight")
+
+
+# plt.figure(7, figsize=(10, 8), dpi=200)
+
+# xvals = [[0,5],[4,5],[3,4],[2,3],[1,2],[0,1]]
+# for i in range(0, len(xvals)):
+#     xLo, xHi = xvals[i][0], xvals[i][1]
+#     label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
+#     x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
+#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
+
+# plt.legend(fontsize=18)
+# plt.yticks([])
+# plt.xlim(0,length) # zoom in on area of interest
+# plt.title('Dropping sand at intervals of x with length 1', fontsize = 20)
+# plt.xlabel('Spacial Position, x', fontsize = 20)
+# plt.ylabel('Height, H', fontsize = 20)
+# plt.savefig('Sand with intervals of x 2.png', bbox_inches="tight")
+
+
+# plt.figure(8, figsize=(10, 8), dpi=200)
+
+# xLo, xHi = 0, 5
+# def S_linear_space_restricted(x, t):
+#     if xLo < x < xHi:
+#         return 1.0
+#     else:
+#         return 0.0
+
+# xvals = [[0,1], [0,2], [0,3], [0,4], [0,5]]
+# for i in range(0, len(xvals)):
+#     xLo, xHi = xvals[i][0], xvals[i][1]
+#     label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
+#     x_pde, u_num = numerical(S_linear_space_restricted, 0.5, 0.5, 5)
+#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
+
+# plt.legend()
+# plt.yticks([])
+# plt.xlim(0,length) # zoom in on area of interest
+# plt.xlabel('Spacial Position, x', fontsize = 20)
+# plt.ylabel('Height, H', fontsize = 20)
+# plt.savefig('Sand with intervals of x 3.png', bbox_inches="tight")
+
+plt.figure(9, figsize=(10, 8), dpi=200)
+
+xLo, xHi = 0, 5
+def S_sin(x, t):
+    return 5*np.abs(np.sin(x))/(3+np.cos(5))
+
+def S_cos(x, t):
+    return 5*np.abs(np.cos(x))/(4+np.sin(5))
+
+def S_even(x, t):
+    return 2*int(int(x) % 2 == 0)
+
+label = "Dump sand as sin(x)"
+x_pde, u_num = numerical(S_sin, 0.5, 0.5, 5)
+plt.plot(x_pde, u_num[:,-1], color = colours[1], label = label)
+
+label = "Dump sand as cos(x)"
+x_pde, u_num = numerical(S_cos, 0.5, 0.5, 5)
+plt.plot(x_pde, u_num[:,-1], color = colours[2], label = label)
+
+label = "Dump sand every other x position"
+x_pde, u_num = numerical(S_even, 0.5, 0.5, 5)
+plt.plot(x_pde, u_num[:,-1], color = colours[3], label = label)
+
+label = "Dump sand over all S"
+x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
+plt.plot(x_pde, u_num[:,-1], color = colours[0], label = label)
+
+plt.legend(fontsize=18)
 plt.yticks([])
 plt.xlim(0,length) # zoom in on area of interest
-plt.xlabel('Spacial Position, x', fontsize = 15)
-plt.ylabel('Height, H', fontsize = 15)
-plt.savefig('Sand with intervals of x.png')
+plt.title('Alternative hopper methods', fontsize = 20)
+plt.xlabel('Spacial Position, x', fontsize = 20)
+plt.ylabel('Height, H', fontsize = 20)
+plt.savefig('Sand with x sin.png', bbox_inches="tight")
+
+# ===== S(x, t) non-constant - Time dependent =====
+
+# plt.figure(7, figsize=(10, 8), dpi=200)
+# T = 100
+# tOn = 2
+# def S_variable_time(x, t):
+#     if round(t) % tOn == 0 and t < 50:
+#         return tOn
+#     else:
+#         return 0
+
+# tvals = [1, 2, 5, 10, 20]
+# for i in range(0, len(tvals)):
+#     tOn = tvals[i]
+#     label = "Dump sand every " + "%0.3f" % tOn + " time"
+#     x_pde, u_num = numerical(S_variable_time, 0.5, 0.5, 5)
+#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
+
+# plt.legend()
+# plt.yticks([])
+# plt.xlim(0,length) # zoom in on area of interest
+# plt.xlabel('Time, t', fontsize = 15)
+# plt.ylabel('Height, H', fontsize = 15)
+# plt.savefig('Sand with intervals of t.png')
