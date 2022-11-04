@@ -221,7 +221,7 @@ blues = ['navy', 'royalblue','mediumslateblue', 'dodgerblue', 'skyblue', 'lights
 
 # ===== S(x, t) non-constant - Space dependent =====
 
-# plt.figure(6, figsize=(10, 8), dpi=200)
+plt.figure(6, figsize=(10, 8), dpi=200)
 
 xLo, xHi = 0, 5
 def S_linear_space(x, t):
@@ -230,62 +230,39 @@ def S_linear_space(x, t):
     else:
         return 0.0
 
-# xvals = [[0,5],[0,4],[0,3],[0,2],[0,1]]
-# for i in range(0, len(xvals)):
-#     xLo, xHi = xvals[i][0], xvals[i][1]
-#     label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
-#     x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
-#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
+xvals = [[0,5],[0,4],[0,3],[0,2],[0,1]]
+for i in range(0, len(xvals)):
+    xLo, xHi = xvals[i][0], xvals[i][1]
+    label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
+    x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
+    plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
 
-# plt.legend(fontsize=18)
-# plt.yticks([])
-# plt.xlim(0,length) # zoom in on area of interest
-# plt.title('Dropping sand at increasing intervals of x', fontsize = 20)
-# plt.xlabel('Spacial Position, x', fontsize = 20)
-# plt.ylabel('Height, H', fontsize = 20)
-# plt.savefig('Sand with intervals of x.png', bbox_inches="tight")
-
-
-# plt.figure(7, figsize=(10, 8), dpi=200)
-
-# xvals = [[0,5],[4,5],[3,4],[2,3],[1,2],[0,1]]
-# for i in range(0, len(xvals)):
-#     xLo, xHi = xvals[i][0], xvals[i][1]
-#     label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
-#     x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
-#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
-
-# plt.legend(fontsize=18)
-# plt.yticks([])
-# plt.xlim(0,length) # zoom in on area of interest
-# plt.title('Dropping sand at intervals of x with length 1', fontsize = 20)
-# plt.xlabel('Spacial Position, x', fontsize = 20)
-# plt.ylabel('Height, H', fontsize = 20)
-# plt.savefig('Sand with intervals of x 2.png', bbox_inches="tight")
+plt.legend(fontsize=18)
+plt.yticks([])
+plt.xlim(0,length) # zoom in on area of interest
+plt.title('Dropping sand at increasing intervals of x', fontsize = 20)
+plt.xlabel('Spacial Position, x', fontsize = 20)
+plt.ylabel('Height, H', fontsize = 20)
+plt.savefig('Sand with intervals of x.png', bbox_inches="tight")
 
 
-# plt.figure(8, figsize=(10, 8), dpi=200)
+plt.figure(7, figsize=(10, 8), dpi=200)
 
-# xLo, xHi = 0, 5
-# def S_linear_space_restricted(x, t):
-#     if xLo < x < xHi:
-#         return 1.0
-#     else:
-#         return 0.0
+xvals = [[0,5],[4,5],[3,4],[2,3],[1,2],[0,1]]
+for i in range(0, len(xvals)):
+    xLo, xHi = xvals[i][0], xvals[i][1]
+    label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
+    x_pde, u_num = numerical(S_linear_space, 0.5, 0.5, 5)
+    plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
 
-# xvals = [[0,1], [0,2], [0,3], [0,4], [0,5]]
-# for i in range(0, len(xvals)):
-#     xLo, xHi = xvals[i][0], xvals[i][1]
-#     label = "Dump sand from (" + "%0.3f" % (int(xLo)) + " to " + "%0.3f" % (int(xHi)) + ")"
-#     x_pde, u_num = numerical(S_linear_space_restricted, 0.5, 0.5, 5)
-#     plt.plot(x_pde, u_num[:,-1], color = colours[i], label = label)
+plt.legend(fontsize=18)
+plt.yticks([])
+plt.xlim(0,length) # zoom in on area of interest
+plt.title('Dropping sand at intervals of x with length 1', fontsize = 20)
+plt.xlabel('Spacial Position, x', fontsize = 20)
+plt.ylabel('Height, H', fontsize = 20)
+plt.savefig('Sand with intervals of x 2.png', bbox_inches="tight")
 
-# plt.legend()
-# plt.yticks([])
-# plt.xlim(0,length) # zoom in on area of interest
-# plt.xlabel('Spacial Position, x', fontsize = 20)
-# plt.ylabel('Height, H', fontsize = 20)
-# plt.savefig('Sand with intervals of x 3.png', bbox_inches="tight")
 
 plt.figure(9, figsize=(10, 8), dpi=200)
 
